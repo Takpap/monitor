@@ -1,0 +1,19 @@
+{
+  "name": "smzdm-monitor-nuxt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bunx --bun nuxi dev",
+    "build": "bunx nuxi build",
+    "start": "bun .output/server/index.mjs",
+    "prepare": "bunx nuxi prepare",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "fast-xml-parser": "^4.5.3",
+    "nuxt": "^3.20.0",
+    "shadcn-nuxt": "^1.0.3",
+    "zod": "^3.25.76"
+  }
+}
