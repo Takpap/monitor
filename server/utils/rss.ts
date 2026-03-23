@@ -8,6 +8,7 @@ export interface FeedItem {
   link: string
   comments: string
   description: string
+  imageUrl: string | null
   pubDate: string
   pubTimestamp: number
 }
@@ -52,6 +53,9 @@ function normalizeFeedItem(rawItem: any, sourceFeedUrl: string): FeedItem | null
   const pubTimestamp = Number.isFinite(Date.parse(pubDate)) ? Date.parse(pubDate) : Date.now()
   const uniqueId = articleId || guid || link
 
+  const imgMatch = description.match(/<img[^>]+src=["'](https?:\/\/[^"']+)["']/i)
+  const imageUrl = imgMatch ? imgMatch[1] : null
+
   return {
     sourceFeedUrl,
     uniqueId,
@@ -60,6 +64,7 @@ function normalizeFeedItem(rawItem: any, sourceFeedUrl: string): FeedItem | null
     link,
     comments,
     description,
+    imageUrl,
     pubDate,
     pubTimestamp
   }

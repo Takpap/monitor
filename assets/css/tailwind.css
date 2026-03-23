@@ -9,3 +9,22 @@
 body {
   @apply bg-slate-50 text-slate-900;
 }
+
+@layer utilities {
+  .pulse-indicator {
+    @apply relative flex h-2 w-2;
+  }
+  .pulse-indicator span:first-child {
+    @apply animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75;
+  }
+  .pulse-indicator span:last-child {
+    @apply relative inline-flex rounded-full h-2 w-2 bg-emerald-500;
+  }
+  
+  .pulse-indicator.warning span:first-child {
+    @apply bg-amber-400;
+  }
+  .pulse-indicator.warning span:last-child {
+    @apply bg-amber-500;
+  }
+}

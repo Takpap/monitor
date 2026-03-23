@@ -522,19 +522,21 @@ export function useMonitorConsole() {
     }
   }
 
-  async function previewRule() {
+  async function previewRule(options: { silent?: boolean } = {}) {
     previewingRule.value = true
-    clearError()
+    if (!options.silent) clearError()
 
     try {
       const title = rulePreviewForm.title.trim()
       if (!title) {
-        throw new Error('请输入模拟标题')
+        if (!options.silent) throw new Error('请输入模拟标题')
+        return
       }
 
       const keywords = normalizeKeywords(subscriptionForm.keywords)
       if (keywords.length === 0) {
-        throw new Error('请先添加至少一个关键词')
+        if (!options.silent) throw new Error('请先添加至少一个关键词')
+        return
       }
 
       rulePreviewResult.value = await previewRuleApi({
@@ -545,13 +547,41 @@ export function useMonitorConsole() {
         matchMode: subscriptionForm.matchMode
       })
 
-      showMessage(`规则模拟完成：${rulePreviewResult.value.matched ? '命中' : '未命中'}`)
+      if (!options.silent) {
+        showMessage(`规则模拟完成：${rulePreviewResult.value.matched ? '命中' : '未命中'}`)
+      }
     } catch (error) {
-      errorMessage.value = parseRequestError(error)
+      if (!options.silent) {
+        errorMessage.value = parseRequestError(error)
+      }
     } finally {
       previewingRule.value = false
     }
   }
+
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null
+  function debouncedPreview() {
+    if (debounceTimer) clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(() => {
+      void previewRule({ silent: true })
+    }, 400)
+  }
+
+  watch(
+    [
+      () => rulePreviewForm.title,
+      () => rulePreviewForm.description,
+      () => subscriptionForm.keywords,
+      () => subscriptionForm.excludeKeywords,
+      () => subscriptionForm.matchMode
+    ],
+    () => {
+      if (rulePreviewForm.title.trim()) {
+        debouncedPreview()
+      }
+    },
+    { deep: true }
+  )
 
   async function removeSubscription(id: number) {
     if (!window.confirm('确认删除该订阅吗？该订阅对应去重索引也会一起删除。')) {

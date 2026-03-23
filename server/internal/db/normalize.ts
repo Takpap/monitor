@@ -157,6 +157,7 @@ export function normalizeHitRow(row: any): HitRecord {
     commentCount: row.comment_count,
     minComments: row.min_comments,
     matchedKeywords: jsonParse<string[]>(row.matched_keywords, []),
+    imageUrl: row.image_url,
     pubDate: row.pub_date,
     createdAt: row.created_at
   }

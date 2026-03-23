@@ -52,16 +52,47 @@ const vm = useMonitorConsole()
         </div>
       </header>
 
-      <p v-if="vm.message" class="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
-        {{ vm.message }}
-      </p>
-      <p v-if="vm.errorMessage" class="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
-        {{ vm.errorMessage }}
-      </p>
+      <div class="h-10">
+        <Transition
+          enter-active-class="transition duration-300 ease-out"
+          enter-from-class="transform translate-y-2 opacity-0"
+          enter-to-class="transform translate-y-0 opacity-100"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
+        >
+          <div v-if="vm.message" class="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700 shadow-sm">
+            <div class="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100">
+               <svg class="h-3 w-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            {{ vm.message }}
+          </div>
+          <div v-else-if="vm.errorMessage" class="flex items-center gap-2 rounded-lg border border-rose-200 bg-rose-50 px-4 py-2.5 text-sm font-medium text-rose-700 shadow-sm">
+            <div class="flex h-5 w-5 items-center justify-center rounded-full bg-rose-100">
+               <svg class="h-3 w-3 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </div>
+            {{ vm.errorMessage }}
+          </div>
+        </Transition>
+      </div>
 
-      <MonitorOverviewPanel v-if="vm.activeSection === 'overview'" :vm="vm" />
-      <MonitorRulesPanel v-else-if="vm.activeSection === 'rules'" :vm="vm" />
-      <MonitorEventsPanel v-else :vm="vm" />
+      <div class="relative">
+        <Transition
+          mode="out-in"
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="transform translate-y-4 opacity-0"
+          enter-to-class="transform translate-y-0 opacity-100"
+          leave-active-class="transition duration-150 ease-in"
+          leave-from-class="opacity-100"
+          leave-to-class="transform -translate-y-2 opacity-0"
+        >
+          <div :key="vm.activeSection">
+            <MonitorOverviewPanel v-if="vm.activeSection === 'overview'" :vm="vm" />
+            <MonitorRulesPanel v-else-if="vm.activeSection === 'rules'" :vm="vm" />
+            <MonitorEventsPanel v-else :vm="vm" />
+          </div>
+        </Transition>
+      </div>
     </div>
   </main>
 </template>

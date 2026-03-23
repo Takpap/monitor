@@ -10,14 +10,22 @@ defineProps<{
   <div class="grid gap-6 lg:grid-cols-3">
     <UiCard class="space-y-3 lg:col-span-1">
       <h2 class="text-lg font-semibold text-slate-900">运行状态</h2>
-      <div class="flex items-center gap-2">
-        <span class="text-sm text-slate-600">当前：</span>
-        <UiBadge :variant="vm.monitorStatus.running ? 'warning' : 'success'">
-          {{ vm.monitorStatus.running ? '运行中' : '空闲' }}
-        </UiBadge>
-        <UiBadge variant="secondary">
-          队列 {{ vm.monitorStatus.queue?.pending || 0 }}/{{ vm.monitorStatus.queue?.running || 0 }}
-        </UiBadge>
+      <div class="flex items-center gap-3 rounded-lg bg-white/50 p-2.5 shadow-sm border border-slate-100">
+        <div :class="['pulse-indicator', vm.monitorStatus.running ? 'warning' : '']">
+          <span></span>
+          <span></span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">系统状态</span>
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-semibold text-slate-700">
+              {{ vm.monitorStatus.running ? '任务执行中' : '服务正常运行' }}
+            </span>
+            <UiBadge variant="secondary" class="h-5 px-1.5 text-[10px]">
+              队列 {{ vm.monitorStatus.queue?.pending || 0 }}/{{ vm.monitorStatus.queue?.running || 0 }}
+            </UiBadge>
+          </div>
+        </div>
       </div>
       <div class="space-y-1 text-sm text-slate-700">
         <p><span class="text-slate-500">最近执行：</span>{{ vm.formatDateTime(vm.monitorStatus.lastRunAt) }}</p>
@@ -33,9 +41,23 @@ defineProps<{
         <p>24h 通知失败：{{ vm.metrics?.deliveryFailed24h ?? 0 }}</p>
         <p>通知队列：{{ vm.metrics?.queuePending ?? 0 }}/{{ vm.metrics?.queueRunning ?? 0 }}</p>
       </div>
-      <div class="rounded-md bg-slate-50 p-3">
-        <p class="mb-2 text-xs uppercase tracking-wide text-slate-500">最近摘要</p>
-        <pre class="overflow-x-auto text-xs text-slate-700">{{ vm.monitorSummaryText }}</pre>
+      <div class="rounded-md bg-slate-50 p-3 border border-slate-100">
+        <div class="mb-2 flex items-center justify-between">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">最近执行摘要</p>
+          <span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-600">
+            <span class="h-1 w-1 rounded-full bg-blue-500 animate-pulse"></span>
+            Live
+          </span>
+        </div>
+        <div v-if="vm.monitorStatus.lastSummaryParsed" class="grid grid-cols-2 gap-y-2 text-xs text-slate-600">
+          <div><span class="text-slate-400">模式：</span>{{ vm.monitorStatus.lastSummaryParsed.trigger === 'auto' ? '自动轮询' : '手动触发' }}</div>
+          <div><span class="text-slate-400">扫描条目：</span>{{ vm.monitorStatus.lastSummaryParsed.scannedItems }} 条</div>
+          <div><span class="text-slate-400">匹配规则：</span>{{ vm.monitorStatus.lastSummaryParsed.matchedRules }} 次</div>
+          <div><span class="text-slate-400">发送通知：</span>{{ vm.monitorStatus.lastSummaryParsed.notified }} 次</div>
+          <div v-if="vm.monitorStatus.lastSummaryParsed.bootstrapIndexed"><span class="text-slate-400">索引初始化：</span>{{ vm.monitorStatus.lastSummaryParsed.bootstrapIndexed }} 条</div>
+          <div class="col-span-2 text-[10px] text-slate-400 italic mt-1">{{ vm.monitorStatus.lastSummaryParsed.note || '' }}</div>
+        </div>
+        <pre v-else class="overflow-x-auto text-[10px] text-slate-500 font-mono">{{ vm.monitorStatus.lastSummary || '暂无数据' }}</pre>
       </div>
     </UiCard>
 

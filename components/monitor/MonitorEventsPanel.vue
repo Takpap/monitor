@@ -55,7 +55,7 @@ defineProps<{
         <thead>
           <tr class="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-500">
             <th class="px-2 py-2">时间</th>
-            <th class="px-2 py-2">Owner</th>
+            <th class="px-2 py-2">封面</th>
             <th class="px-2 py-2">订阅</th>
             <th class="px-2 py-2">标题</th>
             <th class="px-2 py-2">评论</th>
@@ -63,9 +63,14 @@ defineProps<{
           </tr>
         </thead>
         <tbody>
-          <tr v-for="hit in vm.hits" :key="hit.id" class="border-b border-slate-100 align-top">
-            <td class="px-2 py-2 text-slate-500">{{ vm.formatDateTime(hit.createdAt) }}</td>
-            <td class="px-2 py-2 text-slate-600">{{ hit.ownerId }}</td>
+          <tr v-for="hit in vm.hits" :key="hit.id" class="border-b border-slate-100 align-top hover:bg-slate-50/50 transition-colors">
+            <td class="px-2 py-4 text-xs text-slate-500">{{ vm.formatDateTime(hit.createdAt) }}</td>
+            <td class="px-2 py-3">
+              <div class="h-12 w-16 overflow-hidden rounded border border-slate-200 bg-slate-100 shadow-sm transition-transform hover:scale-105">
+                <img v-if="hit.imageUrl" :src="hit.imageUrl" :alt="hit.title" class="h-full w-full object-cover" loading="lazy" />
+                <div v-else class="flex h-full w-full items-center justify-center text-[10px] text-slate-400">无图</div>
+              </div>
+            </td>
             <td class="px-2 py-2">
               <div class="font-medium text-slate-900">{{ hit.subscriptionName }}</div>
               <div class="text-xs text-slate-500">#{{ hit.subscriptionId }}</div>

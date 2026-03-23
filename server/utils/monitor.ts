@@ -166,6 +166,7 @@ export async function runMonitorCycle(trigger: 'auto' | 'manual' = 'auto') {
           commentCount,
           minComments,
           matchedKeywords: match.matchedKeywords,
+          imageUrl: item.imageUrl,
           pubDate: item.pubDate,
           createdAt: nowIso()
         })
@@ -181,6 +182,7 @@ export async function runMonitorCycle(trigger: 'auto' | 'manual' = 'auto') {
             commentCount,
             minComments,
             matchedKeywords: match.matchedKeywords,
+            imageUrl: item.imageUrl,
             pubDate: item.pubDate,
             createdAt: nowIso()
           },

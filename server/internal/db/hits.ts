@@ -45,9 +45,10 @@ export function addHit(input: Omit<HitRecord, 'id'>) {
         comment_count,
         min_comments,
         matched_keywords,
+        image_url,
         pub_date,
         created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `)
     .run(
       input.ownerId,
@@ -60,6 +61,7 @@ export function addHit(input: Omit<HitRecord, 'id'>) {
       input.commentCount,
       input.minComments,
       JSON.stringify(input.matchedKeywords),
+      input.imageUrl,
       input.pubDate,
       input.createdAt
     )
@@ -122,6 +124,7 @@ export function listHitsPage(options: HitsListOptions = {}): HitsPageResult {
         comment_count,
         min_comments,
         matched_keywords,
+        image_url,
         pub_date,
         created_at
       FROM hits

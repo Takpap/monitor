@@ -8,6 +8,7 @@ interface NotificationPayloadBase {
   commentCount: number | null
   minComments: number
   matchedKeywords: string[]
+  imageUrl: string | null
   pubDate: string
   createdAt: string
 }
@@ -169,6 +170,7 @@ export async function notifyTest(config: MonitorConfig, input: TestNotifyInput =
     matchedKeywords: Array.isArray(input.matchedKeywords)
       ? input.matchedKeywords.map((item) => item.trim()).filter(Boolean)
       : ['test'],
+    imageUrl: null,
     pubDate: nowIso(),
     createdAt: nowIso()
   }

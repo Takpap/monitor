@@ -40,7 +40,7 @@ defineProps<{
             <UiBadge
               v-for="(keyword, index) in vm.subscriptionForm.keywords"
               :key="`in-${keyword}-${index}`"
-              variant="secondary"
+              variant="success"
               class="cursor-pointer"
               @click="vm.removeIncludeKeyword(index)"
             >
@@ -50,22 +50,23 @@ defineProps<{
           </div>
         </div>
 
-        <div class="rounded-md border border-slate-200 p-3">
-          <UiLabel>排除关键词</UiLabel>
+        <div class="rounded-md border border-slate-200 p-3 bg-rose-50/20">
+          <UiLabel class="text-rose-700">排除关键词</UiLabel>
           <div class="mt-2 flex gap-2">
             <UiInput
               v-model="vm.excludeKeywordDraft"
               placeholder="输入排除词后回车"
               @keydown="vm.onExcludeKeydown"
               @blur="vm.addExcludeKeyword()"
+              class="border-rose-200 focus:border-rose-400"
             />
-            <UiButton type="button" variant="outline" @click="vm.addExcludeKeyword">添加</UiButton>
+            <UiButton type="button" variant="outline" @click="vm.addExcludeKeyword" class="border-rose-200 text-rose-700 hover:bg-rose-100">添加</UiButton>
           </div>
           <div class="mt-2 flex flex-wrap gap-2">
             <UiBadge
               v-for="(keyword, index) in vm.subscriptionForm.excludeKeywords"
               :key="`ex-${keyword}-${index}`"
-              variant="secondary"
+              variant="destructive"
               class="cursor-pointer"
               @click="vm.removeExcludeKeyword(index)"
             >

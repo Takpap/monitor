@@ -91,6 +91,7 @@ export function initSchema(db: Database) {
 
   ensureColumn(db, 'subscriptions', 'owner_id', `owner_id TEXT NOT NULL DEFAULT 'default'`)
   ensureColumn(db, 'hits', 'owner_id', `owner_id TEXT NOT NULL DEFAULT 'default'`)
+  ensureColumn(db, 'hits', 'image_url', `image_url TEXT`)
 
   db.exec(`
     UPDATE subscriptions SET owner_id = 'default' WHERE owner_id IS NULL OR TRIM(owner_id) = '';

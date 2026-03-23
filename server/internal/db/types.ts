@@ -66,6 +66,7 @@ export interface HitRecord {
   commentCount: number | null
   minComments: number
   matchedKeywords: string[]
+  imageUrl: string | null
   pubDate: string
   createdAt: string
 }
